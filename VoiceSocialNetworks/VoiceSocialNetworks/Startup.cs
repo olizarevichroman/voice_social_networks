@@ -25,19 +25,17 @@ namespace VoiceSocialNetworks
         {
             services.AddControllers();
             services.AddAuthentication()
-                .AddOAuth<OAuthOptions, SlackAuthenticationHandler>("Slack", options =>
+                .AddOAuth<OAuthOptions, OAuthAuthenticationHandler>("Vk", options =>
                 {
                     options.SaveTokens = true;
                     options.ForwardSignIn = "MyScheme";
-                    options.CallbackPath = "/signin-slack";
-                    options.ClientId = "898943090578.913936806982";
-                    options.ClientSecret = "9ca7d53f4943c4224c1d26fc7009140d";
-                    options.AuthorizationEndpoint = "https://slack.com/oauth/authorize";
-                    options.TokenEndpoint = "https://slack.com/api/oauth.access";
+                    options.CallbackPath = "/signin-vk";
+                    options.ClientId = "7286728";
+                    options.ClientSecret = "xtfH1IKoohNWaUd2JJrK";
+                    options.AuthorizationEndpoint = "https://oauth.vk.com/authorize";
+                    options.TokenEndpoint = "https://oauth.vk.com/access_token";
                     options.SignInScheme = "MyScheme";
-                    options.Scope.Add("identity.basic");
                     options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "user_id");
-                    options.ClaimActions.MapJsonKey("Team", "team_id");
                 })
                 .AddScheme<AuthenticationSchemeOptions, InnerAuthenticationHandler>("MyScheme",
                 (_) => { Console.WriteLine("yes"); });

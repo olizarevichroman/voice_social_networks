@@ -5,14 +5,14 @@ namespace VoiceSocialNetworks.Controllers
 {
     public class AuthenticateController : Controller
     {
-        public IActionResult Slack()
+        public IActionResult Vk()
         {
             var authProperties = new AuthenticationProperties
             {
                 RedirectUri = "https://google.com"
             };
 
-            return Challenge(authProperties, "Slack");
+            return Challenge(authProperties, "Vk");
         }
     }
 }

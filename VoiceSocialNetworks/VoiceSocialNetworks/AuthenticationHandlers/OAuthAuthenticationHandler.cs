@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace VoiceSocialNetworks.AuthenticationHandlers
 {
-    public class SlackAuthenticationHandler : OAuthHandler<OAuthOptions>
+    public class OAuthAuthenticationHandler : OAuthHandler<OAuthOptions>
     {
-        public SlackAuthenticationHandler(
+        public OAuthAuthenticationHandler(
             IOptionsMonitor<OAuthOptions> options,
             ILoggerFactory logger,
             UrlEncoder encoder,
@@ -19,7 +19,6 @@ namespace VoiceSocialNetworks.AuthenticationHandlers
         {
 
         }
-
         protected override async Task<AuthenticationTicket> CreateTicketAsync(ClaimsIdentity identity,
             AuthenticationProperties properties,
             OAuthTokenResponse tokens)
