@@ -50,6 +50,10 @@ namespace VoiceSocialNetworks
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseHsts();
+            }
 
             app.UseHttpsRedirection();
             app.UseAuthentication();
