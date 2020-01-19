@@ -39,8 +39,6 @@ namespace VoiceSocialNetworks
                 })
                 .AddScheme<AuthenticationSchemeOptions, InnerAuthenticationHandler>("MyScheme",
                 (_) => { Console.WriteLine("yes"); });
-            
-            //var state = Base64UrlTextEncoder.Encode(dataProtection.Protect(new byte[1]));
         }
 
 

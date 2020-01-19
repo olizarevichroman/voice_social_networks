@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -21,6 +23,14 @@ namespace VoiceSocialNetworks
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    webBuilder.UseKestrel(opt =>
+                    {
+                        opt.ConfigureHttpsDefaults(https =>
+                        {
+                            https.ServerCertificate = new X509Certificate2("certificate");
+                        });
+                        opt.ListenAnyIP(443);
+                    });
                 });
     }
 }
