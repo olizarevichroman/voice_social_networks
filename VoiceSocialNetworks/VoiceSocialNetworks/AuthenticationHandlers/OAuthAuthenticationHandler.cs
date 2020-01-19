@@ -25,7 +25,7 @@ namespace VoiceSocialNetworks.AuthenticationHandlers
         {
             var context = new OAuthCreatingTicketContext(new ClaimsPrincipal(identity), properties, Context, Scheme, Options, Backchannel, tokens, tokens.Response.RootElement);
             context.RunClaimActions();
-            await Events.CreatingTicket(context);
+            await Events.CreatingTicket(context).ConfigureAwait(false);
             return new AuthenticationTicket(context.Principal, context.Properties, Scheme.Name);
         }
     }

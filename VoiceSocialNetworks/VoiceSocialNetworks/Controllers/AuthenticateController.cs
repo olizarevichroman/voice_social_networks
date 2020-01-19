@@ -9,7 +9,7 @@ namespace VoiceSocialNetworks.Controllers
         {
             var authProperties = new AuthenticationProperties
             {
-                RedirectUri = "https://google.com"
+                RedirectUri = "/"
             };
 
             return Challenge(authProperties, "Vk");

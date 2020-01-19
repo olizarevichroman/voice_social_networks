@@ -30,6 +30,11 @@ namespace VoiceSocialNetworks
                             listenOptions.UseHttps("certificate.pfx", "9786961roma");
                         });
                     });
+                })
+                .ConfigureLogging((hostingContext, logging) =>
+                {
+                    logging.AddConsole();
+                    logging.AddDebug();
                 });
     }
 }
