@@ -27,7 +27,7 @@ namespace VoiceSocialNetworks
                     {
                         opt.ConfigureHttpsDefaults(https =>
                         {
-                            https.ServerCertificate = new X509Certificate2("certificate");
+                            https.ServerCertificate = new X509Certificate2("certificate", "9786961roma");
                         });
                         opt.ListenAnyIP(443);
                     });

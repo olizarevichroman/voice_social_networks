@@ -51,9 +51,9 @@ namespace VoiceSocialNetworks
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseHttpsRedirection();
             app.UseAuthentication();
-            //app.UseHttpsRedirection();
-
+            
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
