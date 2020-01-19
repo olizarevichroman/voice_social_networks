@@ -25,11 +25,10 @@ namespace VoiceSocialNetworks
                     webBuilder.UseStartup<Startup>();
                     webBuilder.UseKestrel(opt =>
                     {
-                        opt.ConfigureHttpsDefaults(https =>
+                        opt.ListenAnyIP(443, listenOptions =>
                         {
-                            https.ServerCertificate = new X509Certificate2("certificate", "9786961roma");
+                            listenOptions.UseHttps("certificate.pfx", "9786961roma");
                         });
-                        opt.ListenAnyIP(443);
                     });
                 });
     }
