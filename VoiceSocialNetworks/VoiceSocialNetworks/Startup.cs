@@ -37,6 +37,19 @@ namespace VoiceSocialNetworks
                     options.SignInScheme = "MyScheme";
                     options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "user_id");
                 })
+                .AddOAuth<OAuthOptions, YandexAuthenticationHandler>("Yandex", options =>
+                {
+                    options.SaveTokens = true;
+                    options.ForwardSignIn = "MyScheme";
+                    options.CallbackPath = "/signin-yandex";
+                    options.ClientId = "79a2aa9a61394c5595073a33b8c34a8d";
+                    options.ClientSecret = "a258e53ae8a848b88c057c2f6231baad";
+                    options.AuthorizationEndpoint = "https://oauth.yandex.ru/authorize";
+                    options.TokenEndpoint = "https://oauth.yandex.ru/token";
+                    options.UserInformationEndpoint = "https://login.yandex.ru/info";
+                    options.SignInScheme = "MyScheme";
+                    options.ClaimActions.MapAll();
+                })
                 .AddScheme<AuthenticationSchemeOptions, InnerAuthenticationHandler>("MyScheme",
                 (_) => { Console.WriteLine("yes"); });
         }
