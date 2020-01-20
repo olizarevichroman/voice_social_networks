@@ -14,5 +14,15 @@ namespace VoiceSocialNetworks.Controllers
 
             return Challenge(authProperties, "Vk");
         }
+
+        public IActionResult Yandex()
+        {
+            var authProperties = new AuthenticationProperties
+            {
+                RedirectUri = "/"
+            };
+
+            return Challenge(authProperties, "Yandex");
+        }
     }
 }
