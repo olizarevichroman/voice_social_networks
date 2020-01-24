@@ -1,0 +1,29 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Voice social networks</title>
+    <link rel="stylesheet" href="~/content/bundle.css"/>
+    <script src="~/content/bundle.js" defer></script>
+</head>
+<body>
+    <header>
+        @if(Context.User.Identity.IsAuthenticated)
+        {
+            @foreach(var claim in Context.User.Claims)
+            {
+                <div>@string.Concat(claim.Type, ":", claim.Value)</div>
+            }
+        }
+    </header>
+    <div id="root"></div>
+    -->
+</body>
+</html>
+
