@@ -11,8 +11,6 @@ using System;
 using System.IO;
 using System.Security.Claims;
 using VoiceSocialNetworks.AuthenticationHandlers;
-using VoiceSocialNetworks.DataLayer.Abstractions;
-using VoiceSocialNetworks.DataLayer.Implementations;
 
 namespace VoiceSocialNetworks
 {
@@ -31,9 +29,9 @@ namespace VoiceSocialNetworks
             //services.AddEntityFrameworkSqlServer();
             //services.AddScoped<IUserCreator, UserCreator>();
             //services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<ApplicationContext>();
-            services.AddScoped<UserRepository>();
-            services.AddScoped<VkUserRepository>();
+            ////services.AddScoped<ApplicationContext>();
+            //services.AddScoped<UserRepository>();
+            //services.AddScoped<VkUserRepository>();
             services.AddControllersWithViews();
             services.AddAuthentication(options =>
             {
