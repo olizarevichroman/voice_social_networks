@@ -13,17 +13,17 @@ namespace VoiceSocialNetworks.AuthenticationHandlers
 {
     public class OAuthAuthenticationHandler : OAuthHandler<OAuthOptions>
     {
-        private readonly IUserCreator _userCreator;
+        //private readonly IUserCreator _userCreator;
 
         public OAuthAuthenticationHandler(
             IOptionsMonitor<OAuthOptions> options,
             ILoggerFactory logger,
             UrlEncoder encoder,
-            ISystemClock clock,
-            IUserCreator userCreator)
+            ISystemClock clock)
+            //IUserCreator userCreator)
             : base(options, logger, encoder, clock)
         {
-            _userCreator = userCreator;
+            //_userCreator = userCreator;
         }
 
         protected override async Task<AuthenticationTicket> CreateTicketAsync(ClaimsIdentity identity,
@@ -32,7 +32,7 @@ namespace VoiceSocialNetworks.AuthenticationHandlers
         {
             var authenticationResult = await Context.AuthenticateAsync();
             var user = authenticationResult.Principal;
-            await _userCreator.SyncVkUser(user, tokens);
+            //await _userCreator.SyncVkUser(user, tokens);
 
             //no need to create ticket and do this stuff (, dust need to add/update info with tokens to DB
             var context = new OAuthCreatingTicketContext(new ClaimsPrincipal(identity), properties, Context, Scheme, Options, Backchannel, tokens, tokens.Response.RootElement);

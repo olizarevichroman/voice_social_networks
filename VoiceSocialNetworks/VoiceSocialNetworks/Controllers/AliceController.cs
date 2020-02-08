@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using VoiceSocialNetworks.ControllerModels;
 
 namespace VoiceSocialNetworks.Controllers
 {

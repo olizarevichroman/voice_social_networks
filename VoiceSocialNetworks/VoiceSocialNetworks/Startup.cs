@@ -29,8 +29,8 @@ namespace VoiceSocialNetworks
         public static void ConfigureServices(IServiceCollection services)
         {
             //services.AddEntityFrameworkSqlServer();
-            services.AddScoped<IUserCreator, UserCreator>();
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            //services.AddScoped<IUserCreator, UserCreator>();
+            //services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ApplicationContext>();
             services.AddScoped<UserRepository>();
             services.AddScoped<VkUserRepository>();
