@@ -14,6 +14,7 @@ namespace VoiceSocialNetworks
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    webBuilder.UseStartup<Startup>();
                     webBuilder.UseKestrel(opt =>
                     {
                         opt.ListenAnyIP(443, listenOptions =>
