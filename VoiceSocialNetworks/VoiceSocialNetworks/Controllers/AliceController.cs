@@ -12,8 +12,8 @@ namespace VoiceSocialNetworks.Controllers
         {
 
         }
-        [HttpPost]
-        public async Task<IActionResult> Index(RequestWrapper request)
+
+        public async Task<IActionResult> Index()
         {
             return await Task.FromResult(Ok());
         }
