@@ -20,24 +20,25 @@ class App extends Component {
   }
 
   componentDidMount() {
-    Eventer.fire(RX.GET_USER);
+    // Eventer.fire(RX.GET_USER);
   }
 
   render() {
     const { state } = this;
     const { user } = state ;
+    const isUserAuthenticated = false;
 
     return (
       <div className="App">
-        {user.isAuthenticated 
+        {/* {user.isAuthenticated 
             ? <div className="welcome-message">{user.name}, добро пожаловать</div>
             : false
-        } 
+        }  */}
         <header className="App-header">
             
         </header>
         <div className="content">
-          {user.isAuthenticated
+          {isUserAuthenticated
                   ? <a className="connect-link" href="http://localhost:64039/authenticate/slack">Привязать Slack</a>
                   : <a href="http://localhost:64039/authenticate/yandex">
                       <p id="pointer">
