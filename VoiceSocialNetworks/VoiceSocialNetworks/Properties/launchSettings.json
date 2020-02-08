@@ -20,7 +20,7 @@
     "VoiceSocialNetworks": {
       "commandName": "Project",
       "launchBrowser": false,
-      "applicationUrl": "http://localhost:64039",
+      "applicationUrl": "https://0.0.0.0:443",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
