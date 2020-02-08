@@ -22,10 +22,6 @@ namespace VoiceSocialNetworks
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-
-                    webBuilder.UseStartup<Startup>();
-#if DEBUG
-#else
                     webBuilder.UseKestrel(opt =>
                     {
                         opt.ListenAnyIP(443, listenOptions =>
@@ -33,7 +29,6 @@ namespace VoiceSocialNetworks
                             listenOptions.UseHttps("certificate.pfx", "9786961roma");
                         });
                     });
-#endif
                 })
                 .ConfigureLogging((hostingContext, logging) =>
                 {
