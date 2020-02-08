@@ -1,22 +1,44 @@
-function getPromise(method, url, body) {
-    return new Promise((success, fail) => {
-        const request = new XMLHttpRequest();
-        request.open(method, url, true);
-        request.onload = function() {
-            success(this.response);
-        }
-        request.onerror = function() {
-            fail(this.status);
-        }
+function buildRequest(method, url) {
+    const request = new XMLHttpRequest();
+    request.responseType = "json";
+    request.open(method, url, true);
 
-        request.send(body);
-    })
+    return request;
+}
+
+class ApiRequestExecutor {
+    
+    constructor(request) {
+        this.request = request;
+    }
+
+    send = (body) => {
+        return new Promise((success, fail) => {
+            this.request.onload = function() {
+                success(this.response);
+            }
+            this.request.onerror = function() {
+                fail(this.response);
+            }
+            this.request.send(body);
+        })
+        .catch((error) => {
+            console.log(error.message);
+        });
+    }
 }
 
 export default class ApiRequest {
     
-    static POST(data) {
-        const { body, url} = data;
-        return getPromise("POST", url, body);
+    static POST(url) {
+        const request = buildRequest("POST", url);
+
+        return new ApiRequestExecutor(request);
+    }
+
+    static GET(url) {
+        const request = buildRequest("GET", url);
+
+        return new ApiRequestExecutor(request);
     }
 }

@@ -1,13 +1,18 @@
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using System;
+using System.IO;
 using System.Security.Claims;
 using VoiceSocialNetworks.AuthenticationHandlers;
+using VoiceSocialNetworks.DataLayer.Abstractions;
+using VoiceSocialNetworks.DataLayer.Implementations;
 
 namespace VoiceSocialNetworks
 {
@@ -21,20 +26,35 @@ namespace VoiceSocialNetworks
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public static void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
-            services.AddAuthentication()
-                .AddOAuth<OAuthOptions, OAuthAuthenticationHandler>("Vk", options =>
+            //services.AddEntityFrameworkSqlServer();
+            services.AddScoped<IUserCreator, UserCreator>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<ApplicationContext>();
+            services.AddScoped<UserRepository>();
+            services.AddScoped<VkUserRepository>();
+            services.AddControllersWithViews();
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultSignOutScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            })
+                .AddOAuth<OAuthOptions, OAuthAuthenticationHandler>("Slack", options =>
                 {
                     options.SaveTokens = true;
                     options.ForwardSignIn = "MyScheme";
-                    options.CallbackPath = "/signin-vk";
-                    options.ClientId = "7286728";
-                    options.ClientSecret = "xtfH1IKoohNWaUd2JJrK";
-                    options.AuthorizationEndpoint = "https://oauth.vk.com/authorize";
-                    options.TokenEndpoint = "https://oauth.vk.com/access_token";
-                    options.SignInScheme = "MyScheme";
+                    options.CallbackPath = "/signin-slack";
+                    options.ClientId = "898943090578.913936806982";
+                    options.Scope.Add("channels:read");
+                    options.Scope.Add("chat:write:user");
+                    options.Scope.Add("im:read");
+                    options.Scope.Add("im:write");
+                    options.ClientSecret = "9ca7d53f4943c4224c1d26fc7009140d";
+                    options.AuthorizationEndpoint = "https://slack.com/oauth/authorize";
+                    options.TokenEndpoint = "https://slack.com/api/oauth.access";
+                    options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                     options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "user_id");
                 })
                 .AddOAuth<OAuthOptions, YandexAuthenticationHandler>("Yandex", options =>
@@ -47,19 +67,26 @@ namespace VoiceSocialNetworks
                     options.AuthorizationEndpoint = "https://oauth.yandex.ru/authorize";
                     options.TokenEndpoint = "https://oauth.yandex.ru/token";
                     options.UserInformationEndpoint = "https://login.yandex.ru/info";
-                    options.SignInScheme = "MyScheme";
-                    options.ClaimActions.MapAll();
+                    options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    options.ClaimActions.MapJsonKey(ClaimTypes.Name, "real_name");
+                    options.ClaimActions.MapJsonKey("Id", "id");
+                    
                 })
-                .AddScheme<AuthenticationSchemeOptions, InnerAuthenticationHandler>("MyScheme",
-                (_) => { Console.WriteLine("yes"); });
+                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, opt =>
+                {
+                    opt.LoginPath = "/";
+                    opt.AccessDeniedPath = "/Error/AccessDenied";
+                    opt.SlidingExpiration = true;
+                    opt.ExpireTimeSpan = TimeSpan.FromDays(7);
+                });
         }
 
 
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
+            if (env.IsDevelopment()) 
             {
                 app.UseDeveloperExceptionPage();
             }
@@ -67,12 +94,23 @@ namespace VoiceSocialNetworks
             {
                 app.UseHsts();
             }
-
+            //app.UseStatusCodePages((context) =>
+            //{
+            //    context.Options.
+            //    return Task.CompletedTask;
+            //})
             app.UseHttpsRedirection();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                RequestPath = "/content",
+                FileProvider = new PhysicalFileProvider(
+                    Path.Combine(Directory.GetCurrentDirectory(),
+                    "ClientApp/content"))
+            });
             app.UseAuthentication();
-
+            
             app.UseRouting();
-
+            app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();

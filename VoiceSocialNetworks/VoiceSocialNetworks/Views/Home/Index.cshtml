@@ -13,17 +13,7 @@
     <script src="~/content/bundle.js" defer></script>
 </head>
 <body>
-    <header>
-        @if(Context.User.Identity.IsAuthenticated)
-        {
-            @foreach(var claim in Context.User.Claims)
-            {
-                <div>@string.Concat(claim.Type, ":", claim.Value)</div>
-            }
-        }
-    </header>
     <div id="root"></div>
-    -->
 </body>
 </html>
 

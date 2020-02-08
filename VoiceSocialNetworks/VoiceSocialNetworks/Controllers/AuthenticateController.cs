@@ -1,18 +1,20 @@
 ﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace VoiceSocialNetworks.Controllers
 {
     public class AuthenticateController : Controller
     {
-        public IActionResult Vk()
+        [Authorize]
+        public IActionResult Slack()
         {
             var authProperties = new AuthenticationProperties
             {
                 RedirectUri = "/"
             };
 
-            return Challenge(authProperties, "Vk");
+            return Challenge(authProperties, "Slack");
         }
 
         public IActionResult Yandex()
