@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using VoiceSocialNetworks.ControllerModels;
 
 namespace VoiceSocialNetworks.Controllers
 {
@@ -11,10 +12,10 @@ namespace VoiceSocialNetworks.Controllers
         {
 
         }
-
-        public async Task<IActionResult> Index()
+        //[HttpPost]
+        public async Task<IActionResult> Index(RequestWrapper request)
         {
-            return await Task.FromResult(Ok());
+            return await Task.FromResult(Ok(request));
         }
     }
 }
