@@ -17,10 +17,14 @@ namespace VoiceSocialNetworks
                     webBuilder.UseStartup<Startup>();
                     webBuilder.UseKestrel(opt =>
                     {
+#if DEBUG
+                        opt.ListenLocalhost(64039);
+#else
                         opt.ListenAnyIP(443, listenOptions =>
                         {
                             listenOptions.UseHttps("certificate.pfx", "9786961roma");
                         });
+#endif
                     });
                 });
     }
