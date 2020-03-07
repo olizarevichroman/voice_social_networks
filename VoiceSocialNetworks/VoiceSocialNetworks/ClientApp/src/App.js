@@ -6,7 +6,6 @@ import Eventer from './shared/js/events/eventer';
 import RX from './rx/user/constants';
 import UserStore from './data/stores/userStore';
 import { Container } from 'flux/utils';
-import LoginForm from './shared/js/components/loginForm.jsx';
 
 class App extends Component {
   static getStores() {
@@ -20,25 +19,25 @@ class App extends Component {
   }
 
   componentDidMount() {
-    // Eventer.fire(RX.GET_USER);
+    Eventer.fire(RX.GET_USER);
   }
 
   render() {
     const { state } = this;
     const { user } = state ;
-    const isUserAuthenticated = false;
+    const isUserAuthenticated = user.isAuthenticated;
 
     return (
       <div className="App">
-        {/* {user.isAuthenticated 
+        {isUserAuthenticated 
             ? <div className="welcome-message">{user.name}, добро пожаловать</div>
             : false
-        }  */}
+        } 
         <header className="App-header">
             
         </header>
         <div className="content">
-          {isUserAuthenticated
+          {!isUserAuthenticated
                   ? <a className="connect-link" href="/authenticate/slack">Привязать Slack</a>
                   : <a href="/authenticate/yandex">
                       <p id="pointer">
