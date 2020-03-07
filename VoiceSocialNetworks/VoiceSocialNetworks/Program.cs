@@ -19,11 +19,9 @@ namespace VoiceSocialNetworks
                     webBuilder.UseStartup<Startup>();
                     webBuilder.UseKestrel(opt =>
                     {
-                        var path = Path.Combine(Directory.GetCurrentDirectory(), "certificate");
-                        var certificate = new X509Certificate2(path, "9786961roma");
                         opt.ListenAnyIP(443, listenOptions =>
                         {
-                            listenOptions.UseHttps(certificate);
+                            listenOptions.UseHttps("certificate.pfx", "9786961roma");
                         });
                     });
                 });
