@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using System.IO;
+using System.Security.Cryptography.X509Certificates;
 
 namespace VoiceSocialNetworks
 {
@@ -17,9 +19,11 @@ namespace VoiceSocialNetworks
                     webBuilder.UseStartup<Startup>();
                     webBuilder.UseKestrel(opt =>
                     {
+                        var path = Path.Combine(Directory.GetCurrentDirectory(), "certificate");
+                        var certificate = new X509Certificate2(path, "9786961roma");
                         opt.ListenAnyIP(443, listenOptions =>
                         {
-                            listenOptions.UseHttps("certificate.pfx", "9786961roma");
+                            listenOptions.UseHttps(certificate);
                         });
                     });
                 });

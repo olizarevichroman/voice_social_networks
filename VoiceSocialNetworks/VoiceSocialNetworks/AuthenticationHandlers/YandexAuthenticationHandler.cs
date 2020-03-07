@@ -14,16 +14,16 @@ namespace VoiceSocialNetworks.AuthenticationHandlers
 {
     public class YandexAuthenticationHandler : OAuthHandler<OAuthOptions>
     {
-        //private readonly IUserCreator _userCreator;
+        private readonly IUserCreator _userCreator;
         public YandexAuthenticationHandler(
             IOptionsMonitor<OAuthOptions> options,
             ILoggerFactory logger,
             UrlEncoder encoder,
-            ISystemClock clock)
-            //IUserCreator userCreator)
+            ISystemClock clock,
+            IUserCreator userCreator)
             : base(options, logger, encoder, clock)
         {
-            //_userCreator = userCreator;
+            _userCreator = userCreator;
         }
 
         protected override async Task<AuthenticationTicket> CreateTicketAsync(
@@ -31,7 +31,7 @@ namespace VoiceSocialNetworks.AuthenticationHandlers
             AuthenticationProperties properties,
             OAuthTokenResponse tokens)
         {
-            //Options.Events.OnCreatingTicket += _userCreator.SyncYandexUser;
+            Options.Events.OnCreatingTicket += _userCreator.SyncYandexUser;
             using var request = new HttpRequestMessage(HttpMethod.Get, Options.UserInformationEndpoint);
             request.Headers.Authorization = new AuthenticationHeaderValue("OAuth", tokens.AccessToken);
 

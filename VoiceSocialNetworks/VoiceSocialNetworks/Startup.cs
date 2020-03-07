@@ -11,6 +11,8 @@ using System;
 using System.IO;
 using System.Security.Claims;
 using VoiceSocialNetworks.AuthenticationHandlers;
+using VoiceSocialNetworks.DataLayer.Abstractions;
+using VoiceSocialNetworks.DataLayer.Implementations;
 
 namespace VoiceSocialNetworks
 {
@@ -26,12 +28,11 @@ namespace VoiceSocialNetworks
         // This method gets called by the runtime. Use this method to add services to the container.
         public static void ConfigureServices(IServiceCollection services)
         {
-            //services.AddEntityFrameworkSqlServer();
-            //services.AddScoped<IUserCreator, UserCreator>();
-            //services.AddScoped<IUnitOfWork, UnitOfWork>();
-            ////services.AddScoped<ApplicationContext>();
-            //services.AddScoped<UserRepository>();
-            //services.AddScoped<VkUserRepository>();
+            services.AddScoped<IUserCreator, UserCreator>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<ApplicationContext>();
+            services.AddScoped<UserRepository>();
+            services.AddScoped<VkUserRepository>();
             services.AddControllersWithViews();
             services.AddAuthentication(options =>
             {
@@ -92,11 +93,7 @@ namespace VoiceSocialNetworks
             {
                 app.UseHsts();
             }
-            //app.UseStatusCodePages((context) =>
-            //{
-            //    context.Options.
-            //    return Task.CompletedTask;
-            //})
+
             app.UseHttpsRedirection();
             app.UseStaticFiles(new StaticFileOptions
             {
