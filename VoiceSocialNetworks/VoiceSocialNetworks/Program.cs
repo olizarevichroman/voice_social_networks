@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace VoiceSocialNetworks
 {
@@ -14,6 +15,10 @@ namespace VoiceSocialNetworks
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    webBuilder.ConfigureLogging(loggingBuilder =>
+                    {
+                        loggingBuilder.AddConsole();
+                    });
                     webBuilder.UseStartup<Startup>();
                     webBuilder.UseKestrel(opt =>
                     {
