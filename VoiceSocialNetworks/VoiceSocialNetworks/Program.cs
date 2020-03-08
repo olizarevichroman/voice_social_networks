@@ -17,12 +17,20 @@ namespace VoiceSocialNetworks
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                    webBuilder.UseKestrel(opt =>
+                    webBuilder.ConfigureKestrel(options =>
                     {
-                        opt.ListenAnyIP(443, listenOptions =>
+#if DEBUG
+                        options.ListenLocalhost(64039);
+#else
+                        options.ListenAnyIP(443, listenOptions =>
                         {
-                            listenOptions.UseHttps("certificate.pfx", "9786961roma");
+                            var certificatePath = Path.Combine(Directory.GetCurrentDirectory(), "cert.pfx");
+                            var certificatePrivateKey = "9786961roma";
+                            var certificate = new X509Certificate2(File.ReadAllBytes(certificatePath), certificatePrivateKey, X509KeyStorageFlags.DefaultKeySet);
+
+                            listenOptions.UseHttps(certificate);
                         });
+#endif
                     });
                 });
     }
