@@ -97,10 +97,11 @@ namespace VoiceSocialNetworks
             //app.UseHttpsRedirection();
             app.UseStaticFiles(new StaticFileOptions
             {
-                RequestPath = "/content",
+                RequestPath = "",
                 FileProvider = new PhysicalFileProvider(
                     Path.Combine(Directory.GetCurrentDirectory(),
-                    "ClientApp/content"))
+                    "ClientApp/content")),
+                ServeUnknownFileTypes = true
             });
             app.UseAuthentication();
             
