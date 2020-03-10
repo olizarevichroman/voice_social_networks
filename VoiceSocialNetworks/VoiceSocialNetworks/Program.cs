@@ -27,7 +27,7 @@ namespace VoiceSocialNetworks
 #else
                         opt.ListenAnyIP(443, listenOptions =>
                         {
-                            listenOptions.UseHttps("cert.pfx", "9786961roma");
+                            listenOptions.UseHttps("certificate.pfx", "9786961roma");
                         });
 #endif
                     });

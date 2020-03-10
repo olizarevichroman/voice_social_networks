@@ -94,7 +94,7 @@ namespace VoiceSocialNetworks
                 app.UseHsts();
             }
 
-            //app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
             app.UseStaticFiles(new StaticFileOptions
             {
                 RequestPath = "/content",
