@@ -15,15 +15,23 @@ namespace VoiceSocialNetworks.Controllers
         //[HttpPost]
         public async Task<IActionResult> Index(RequestWrapper request)
         {
-            var result = new ResponseWrapper();
+            var result = new ResponseWrapper
+            {
+                Session = request.Session,
+                Version = request.Version
+            };
 
             if (request.AccountLinkingCompleted == null)
             {
                 result.StartAccountLinking = new object();
+
+                return await Task.FromResult(Ok(result));
             }
 
-            result.Session = request.Session;
-            result.Version = request.Version;
+            result.Response = new Response
+            {
+                Text = "Ты авторизован, поздравляю!"
+            };
 
             return await Task.FromResult(Ok(result));
         }
