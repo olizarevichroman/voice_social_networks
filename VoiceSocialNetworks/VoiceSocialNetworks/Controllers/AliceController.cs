@@ -24,7 +24,7 @@ namespace VoiceSocialNetworks.Controllers
                 Version = request.Version
             };
 
-            if (request.AccountLinkingCompleted == null || request.Session.New)
+            if (request.AccountLinkingCompleted == null && request.Session.New)
             {
                 result.StartAccountLinking = new object();
 
