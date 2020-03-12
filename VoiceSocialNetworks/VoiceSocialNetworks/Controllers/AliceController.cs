@@ -1,5 +1,4 @@
-﻿using System.Text.Json;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using VoiceSocialNetworks.ControllerModels;
 
@@ -25,14 +24,8 @@ namespace VoiceSocialNetworks.Controllers
 
             result.Session = request.Session;
             result.Version = request.Version;
-            var jsonSerializerSettings = new JsonSerializerOptions
-            {
-                IgnoreNullValues = true
-            };
-            var resultObject = JsonSerializer.Serialize(result, jsonSerializerSettings);
-            var jsonResult = new JsonResult(resultObject);
 
-            return await Task.FromResult(jsonResult);
+            return await Task.FromResult(Ok(result));
         }
     }
 }

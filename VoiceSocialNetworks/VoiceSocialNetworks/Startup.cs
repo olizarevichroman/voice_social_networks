@@ -13,6 +13,8 @@ using System.Security.Claims;
 using VoiceSocialNetworks.AuthenticationHandlers;
 using VoiceSocialNetworks.DataLayer.Abstractions;
 using VoiceSocialNetworks.DataLayer.Implementations;
+using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
+using Newtonsoft.Json;
 
 namespace VoiceSocialNetworks
 {
@@ -33,7 +35,12 @@ namespace VoiceSocialNetworks
             services.AddScoped<ApplicationContext>();
             services.AddScoped<UserRepository>();
             services.AddScoped<VkUserRepository>();
-            services.AddControllersWithViews();
+            services.AddControllersWithViews()
+                    .AddNewtonsoftJson(options =>
+                    {
+                        options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+                    });
+
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
