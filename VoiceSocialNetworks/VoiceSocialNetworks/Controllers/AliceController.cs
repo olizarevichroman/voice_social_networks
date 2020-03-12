@@ -1,5 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Net.Http.Headers;
 using VoiceSocialNetworks.ControllerModels;
 
 namespace VoiceSocialNetworks.Controllers
@@ -15,6 +17,7 @@ namespace VoiceSocialNetworks.Controllers
         //[HttpPost]
         public async Task<IActionResult> Index(RequestWrapper request)
         {
+            Console.WriteLine(Request.Headers[HeaderNames.Authorization]);
             var result = new ResponseWrapper
             {
                 Session = request.Session,
