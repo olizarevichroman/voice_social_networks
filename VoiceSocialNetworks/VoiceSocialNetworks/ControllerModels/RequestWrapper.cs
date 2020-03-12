@@ -4,6 +4,9 @@ namespace VoiceSocialNetworks.ControllerModels
 {
     public class RequestWrapper
     {
+        [JsonProperty("account_linking_complete_event")]
+        public object AccountLinkingCompleted { get; set; }
+
         [JsonProperty("request")]
         public Request Request { get; set; }
 
