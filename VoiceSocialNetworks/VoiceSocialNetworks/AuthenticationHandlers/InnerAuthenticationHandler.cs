@@ -12,7 +12,7 @@ using VoiceSocialNetworks.SDK.Clients;
 
 namespace VoiceSocialNetworks.AuthenticationHandlers
 {
-    public class InnerAuthenticationHandler : SignInAuthenticationHandler<AuthenticationSchemeOptions>
+    public class InnerAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
     {
         private const string BEARER_PREFIX = "Bearer";
         private readonly IYandexClient _yandexClient;
@@ -39,29 +39,21 @@ namespace VoiceSocialNetworks.AuthenticationHandlers
                     return AuthenticateResult.NoResult();
                 }
 
-                var user = await _yandexClient.GetUser(oauthToken);
-                if (user == null)
+                var userClaims = await _yandexClient.GetUserClaims(oauthToken);
+                if (userClaims == null)
                 {
                     return AuthenticateResult.NoResult();
                 }
 
                 var claimsPrincipal = new ClaimsPrincipal();
-                var authenticationTicket = new AuthenticationTicket(Context.User, "YandexToken");
+                var identity = new ClaimsIdentity(userClaims, "YandexToken");
+                claimsPrincipal.AddIdentity(identity);
+                var authenticationTicket = new AuthenticationTicket(claimsPrincipal, "YandexToken");
 
                 return AuthenticateResult.Success(authenticationTicket);
             }
 
             return AuthenticateResult.NoResult();
-        }
-
-        protected override async Task HandleSignInAsync(ClaimsPrincipal user, AuthenticationProperties properties)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override Task HandleSignOutAsync(AuthenticationProperties properties)
-        {
-            throw new NotImplementedException();
         }
     }
 }

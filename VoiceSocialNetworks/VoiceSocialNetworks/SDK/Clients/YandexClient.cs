@@ -1,8 +1,15 @@
-﻿using Microsoft.Net.Http.Headers;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.OAuth.Claims;
+using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Security.Claims;
+using System.Text.Json;
 using System.Threading.Tasks;
 using VoiceSocialNetworks.DataLayer.Models;
 
@@ -17,7 +24,25 @@ namespace VoiceSocialNetworks.SDK.Clients
             _httpClient = new HttpClient();
         }
 
-        public async Task<User> GetUser(string oauthToken)
+        //private async Task<User> GetUser(string oauthToken)
+        //{
+        //    using var request = new HttpRequestMessage(HttpMethod.Get, USER_INFO_URL);
+        //    Console.WriteLine($"Request to Yandex GetUserInfo with header value = {oauthToken}");
+        //    request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", oauthToken);
+        //    var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
+        //    if (!response.IsSuccessStatusCode)
+        //    {
+        //        Console.WriteLine($"Invalid response to {nameof(GetUser)} with status code = {response.StatusCode}");
+        //        return null;
+        //    }
+
+        //    var user = JsonConvert.DeserializeObject<User>(await response.Content.ReadAsStringAsync());
+        //    Console.WriteLine($"{nameof(GetUser)} returned user: {JsonConvert.SerializeObject(user)}");
+
+        //    return user;
+        //}
+
+        private async Task<string> GetUser(string oauthToken)
         {
             using var request = new HttpRequestMessage(HttpMethod.Get, USER_INFO_URL);
             Console.WriteLine($"Request to Yandex GetUserInfo with header value = {oauthToken}");
@@ -29,10 +54,16 @@ namespace VoiceSocialNetworks.SDK.Clients
                 return null;
             }
 
-            var user = JsonConvert.DeserializeObject<User>(await response.Content.ReadAsStringAsync());
-            Console.WriteLine($"{nameof(GetUser)} returned user: {JsonConvert.SerializeObject(user)}");
+            return await response.Content.ReadAsStringAsync();
+        }
 
-            return user;
+        public async Task<IEnumerable<Claim>> GetUserClaims(string oauthToken)
+        {
+            var jsonUser = await GetUser(oauthToken);
+            var jsonRoot = JsonDocument.Parse(jsonUser).RootElement;
+            var claims = jsonRoot.EnumerateObject().Select(prop => new Claim(prop.Name, prop.Value.GetRawText()));
+
+            return claims;
         }
 
         public void Dispose()
