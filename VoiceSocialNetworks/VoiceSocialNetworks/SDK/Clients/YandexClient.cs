@@ -20,7 +20,7 @@ namespace VoiceSocialNetworks.SDK.Clients
         public async Task<User> GetUser(string oauthToken)
         {
             using var request = new HttpRequestMessage(HttpMethod.Get, USER_INFO_URL);
-            var authorizationHeaderValue = $"Bearer {oauthToken}";
+            var authorizationHeaderValue = $"OAuth {oauthToken}";
             Console.WriteLine($"Request to Yandex GetUserInfo with header value = {authorizationHeaderValue}");
             request.Headers.Authorization = new AuthenticationHeaderValue(HeaderNames.Authorization, authorizationHeaderValue);
             var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
