@@ -58,7 +58,7 @@ namespace VoiceSocialNetworks
                     options.ForwardDefaultSelector = (context) =>
                     {
                         Console.WriteLine($"PolicyBased scheme challenged with Path = {context.Request.Path}");
-                        var schemeName = context.Request.Path.Value == "alice"
+                        var schemeName = context.Request.Path.Value == "/alice"
                                                             ? "YandexToken"
                                                             : CookieAuthenticationDefaults.AuthenticationScheme;
 
