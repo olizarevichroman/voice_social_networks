@@ -15,6 +15,7 @@ using VoiceSocialNetworks.DataLayer.Abstractions;
 using VoiceSocialNetworks.DataLayer.Implementations;
 using Newtonsoft.Json;
 using VoiceSocialNetworks.SDK.Clients;
+using Microsoft.AspNetCore.Http;
 
 namespace VoiceSocialNetworks
 {
@@ -48,10 +49,24 @@ namespace VoiceSocialNetworks
                 //options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 //options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 //options.DefaultSignOutScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultAuthenticateScheme = "YandexToken";
-                options.DefaultSignInScheme = "YandexToken";
-                options.DefaultSignOutScheme = "YandexToken";
+                options.DefaultAuthenticateScheme = "PolicyBased";
+                options.DefaultSignInScheme = "PolicyBased";
+                options.DefaultSignOutScheme = "PolicyBased";
             })
+                .AddPolicyScheme("PolicyBased", "PolyciBased", options =>
+                {
+                    options.ForwardDefaultSelector = (context) =>
+                    {
+                        Console.WriteLine($"PolicyBased scheme challenged with Path = {context.Request.Path}");
+                        var schemeName = context.Request.Path.Value == "alice"
+                                                            ? "YandexToken"
+                                                            : CookieAuthenticationDefaults.AuthenticationScheme;
+
+                        Console.WriteLine($"PolicyBased scheme returns scheme name = {schemeName}");
+
+                        return schemeName;
+                    };
+                })
                 .AddScheme<AuthenticationSchemeOptions, InnerAuthenticationHandler>("YandexToken", options =>
                 {
 
