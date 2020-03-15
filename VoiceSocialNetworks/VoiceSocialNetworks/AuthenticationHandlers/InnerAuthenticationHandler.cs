@@ -32,7 +32,7 @@ namespace VoiceSocialNetworks.AuthenticationHandlers
             if (authorizationHeader != null && authorizationHeader.StartsWith(BEARER_PREFIX))
             {
                 Console.WriteLine($"In {nameof(InnerAuthenticationHandler)}.{nameof(HandleAuthenticateAsync)} autorization header value = {authorizationHeader}");
-                var oauthToken = authorizationHeader.Replace(BEARER_PREFIX, "");
+                var oauthToken = authorizationHeader.Replace(BEARER_PREFIX, "").TrimStart();
                 
                 if (oauthToken == null)
                 {
