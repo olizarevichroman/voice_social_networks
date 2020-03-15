@@ -30,7 +30,7 @@ namespace VoiceSocialNetworks.SDK.Clients
             }
 
             var user = JsonConvert.DeserializeObject<User>(await response.Content.ReadAsStringAsync());
-            Console.WriteLine($"{nameof(GetUser)} returned user: {user}");
+            Console.WriteLine($"{nameof(GetUser)} returned user: {JsonConvert.SerializeObject(user)}");
 
             return user;
         }
