@@ -31,7 +31,9 @@ namespace VoiceSocialNetworks.AuthenticationHandlers
             var authorizationHeader = Context.Request.Headers[HeaderNames.Authorization].FirstOrDefault();
             if (authorizationHeader != null && authorizationHeader.StartsWith(BEARER_PREFIX))
             {
+                Console.WriteLine($"In {nameof(InnerAuthenticationHandler)}.{nameof(HandleAuthenticateAsync)} autorization header value = {authorizationHeader}");
                 var oauthToken = authorizationHeader.Replace(BEARER_PREFIX, "");
+                
                 if (oauthToken == null)
                 {
                     return AuthenticateResult.NoResult();
