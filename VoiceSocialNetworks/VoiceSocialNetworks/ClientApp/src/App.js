@@ -1,5 +1,4 @@
 import './App.css';
-import './shared/css/header.css';
 import './rx/user/userRx';
 import React, { Component } from 'react'
 import Eventer from './shared/js/events/eventer';

@@ -1,15 +1,13 @@
 .App {
   text-align: center;
-  background-color: #f4f4f4;
+  background-color: #201f1f;
 }
-
 
 .App-header {
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
-  background-color: #201f1f;
   height: 150px;
 }
 

@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.OAuth;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Text.Json;
@@ -19,18 +21,16 @@ namespace VoiceSocialNetworks.DataLayer.Implementations
         {
             var userRepository = _unitOfWork.UserRepository;
             var identity = ticketContext.Identity;
-            var id  = identity.Claims.First(c => c.Type == "Id").Value;
-            var user = await userRepository.GetEntity(id).ConfigureAwait(false);
+            var claimsKeyToValue = identity.Claims.Select(c => new KeyValuePair<string, string>(c.Type, c.Value));
+            var claimsDictionary = new Dictionary<string, string>(claimsKeyToValue);
+            
+            var claimsJson = JsonConvert.SerializeObject(claimsDictionary);
+            var yandexUser = JsonConvert.DeserializeObject<User>(claimsJson);
+            var user = await userRepository.GetEntity(yandexUser.Id).ConfigureAwait(false);
 
             if (user == null)
             {
-                var newUser = new User
-                {
-                    Id = id,
-                    DisplayName = identity.Name
-                };
-
-                userRepository.Add(newUser);
+                userRepository.Add(yandexUser);
                 //here we need to create new user with associated claims
             }
             else

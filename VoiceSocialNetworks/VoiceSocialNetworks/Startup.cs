@@ -13,8 +13,8 @@ using System.Security.Claims;
 using VoiceSocialNetworks.AuthenticationHandlers;
 using VoiceSocialNetworks.DataLayer.Abstractions;
 using VoiceSocialNetworks.DataLayer.Implementations;
-using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 using Newtonsoft.Json;
+using VoiceSocialNetworks.SDK.Clients;
 
 namespace VoiceSocialNetworks
 {
@@ -30,6 +30,8 @@ namespace VoiceSocialNetworks
         // This method gets called by the runtime. Use this method to add services to the container.
         public static void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<IYandexClient, YandexClient>();
+            services.AddDbContext<ApplicationContext>();
             services.AddScoped<IUserCreator, UserCreator>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ApplicationContext>();
@@ -43,10 +45,17 @@ namespace VoiceSocialNetworks
 
             services.AddAuthentication(options =>
             {
-                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultSignOutScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                //options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                //options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                //options.DefaultSignOutScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultAuthenticateScheme = "YandexToken";
+                options.DefaultSignInScheme = "YandexToken";
+                options.DefaultSignOutScheme = "YandexToken";
             })
+                .AddScheme<AuthenticationSchemeOptions, InnerAuthenticationHandler>("YandexToken", options =>
+                {
+
+                })
                 .AddOAuth<OAuthOptions, OAuthAuthenticationHandler>("Slack", options =>
                 {
                     options.SaveTokens = true;
@@ -74,9 +83,14 @@ namespace VoiceSocialNetworks
                     options.TokenEndpoint = "https://oauth.yandex.ru/token";
                     options.UserInformationEndpoint = "https://login.yandex.ru/info";
                     options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    options.ClaimActions.MapJsonKey(ClaimTypes.Name, "real_name");
-                    options.ClaimActions.MapJsonKey("Id", "id");
-                    
+                    options.ClaimActions.MapJsonKey("first_name", "first_name");
+                    options.ClaimActions.MapJsonKey("last_name", "last_name");
+                    options.ClaimActions.MapJsonKey("display_name", "display_name");
+                    options.ClaimActions.MapJsonKey("default_email", "default_email");
+                    options.ClaimActions.MapJsonKey("real_name", "real_name");
+                    options.ClaimActions.MapJsonKey("login", "login");
+                    options.ClaimActions.MapJsonKey("sex", "sex");
+                    options.ClaimActions.MapJsonKey("id", "id");
                 })
                 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, opt =>
                 {
