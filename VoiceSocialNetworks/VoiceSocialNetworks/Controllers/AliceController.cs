@@ -17,14 +17,14 @@ namespace VoiceSocialNetworks.Controllers
         //[HttpPost]
         public async Task<IActionResult> Index(RequestWrapper request)
         {
-            Console.WriteLine(Request.Headers[HeaderNames.Authorization]);
+            Console.WriteLine($"Current user authenticated : {HttpContext.User.Identity.IsAuthenticated}");
             var result = new ResponseWrapper
             {
                 Session = request.Session,
                 Version = request.Version
             };
 
-            if (request.AccountLinkingCompleted == null && request.Session.New)
+            if (!HttpContext.User.Identity.IsAuthenticated)
             {
                 result.StartAccountLinking = new object();
 
