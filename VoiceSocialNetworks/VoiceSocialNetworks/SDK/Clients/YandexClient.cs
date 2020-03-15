@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using VoiceSocialNetworks.DataLayer.Models;
 
@@ -18,6 +19,8 @@ namespace VoiceSocialNetworks.SDK.Clients
         public async Task<User> GetUser(string oauthToken)
         {
             using var request = new HttpRequestMessage(HttpMethod.Get, USER_INFO_URL);
+            var authorizationHeaderValue = $"Bearer {oauthToken}";
+            request.Headers.Authorization = new AuthenticationHeaderValue("Auhtorization", authorizationHeaderValue);
             var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
             if (!response.IsSuccessStatusCode)
             {
