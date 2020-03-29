@@ -20,7 +20,6 @@ namespace VoiceSocialNetworks.Controllers
             _unitOfWork = unitOfWork;
         }
         
-        [HttpGet]
         public async Task<IActionResult> Index(RequestWrapper request)
         {
             Console.WriteLine($"Current user authenticated : {HttpContext.User.Identity.IsAuthenticated}");
