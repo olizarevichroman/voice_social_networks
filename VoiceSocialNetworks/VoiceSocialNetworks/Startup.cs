@@ -56,6 +56,7 @@ namespace VoiceSocialNetworks
                 {
                     options.ForwardDefaultSelector = (context) =>
                     {
+                        Console.WriteLine($"Request coming with path: {context.Request.Path}");
                         Console.WriteLine($"PolicyBased scheme challenged with Path = {context.Request.Path}");
                         var schemeName = context.Request.Path.Value == "/alice"
                                                             ? "YandexToken"
