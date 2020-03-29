@@ -132,7 +132,11 @@ namespace VoiceSocialNetworks
                     "ClientApp/content"))
             });
             app.UseAuthentication();
-            
+            app.Use(async (context, next) =>
+            {
+                await next();
+                Console.WriteLine($"Status code: {context.Response.StatusCode}");
+            });
             app.UseRouting();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
