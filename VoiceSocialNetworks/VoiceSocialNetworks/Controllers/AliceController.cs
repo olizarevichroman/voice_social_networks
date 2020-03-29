@@ -15,6 +15,7 @@ namespace VoiceSocialNetworks.Controllers
         private readonly IUnitOfWork _unitOfWork;
         public AliceController(IUserCreator userCreator, IUnitOfWork unitOfWork)
         {
+            Console.WriteLine($"{nameof(AliceController)} constructor");
             _userCreator = userCreator;
             _unitOfWork = unitOfWork;
         }

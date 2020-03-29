@@ -72,6 +72,8 @@ namespace VoiceSocialNetworks.SDK.Clients
                                     .Where(prop => prop.Value.ValueKind != JsonValueKind.Array)
                                     .Select(prop => new Claim(prop.Name, prop.Value.GetString()));
 
+            Console.WriteLine($"In {nameof(GetUserClaims)} return claims: claims");
+
             return claims;
         }
 

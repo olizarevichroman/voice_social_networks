@@ -49,6 +49,7 @@ namespace VoiceSocialNetworks.AuthenticationHandlers
                 var identity = new ClaimsIdentity(userClaims, "YandexToken");
                 claimsPrincipal.AddIdentity(identity);
                 var authenticationTicket = new AuthenticationTicket(claimsPrincipal, "YandexToken");
+                Console.WriteLine($"In {nameof(HandleAuthenticateAsync)} successfull ticket");
 
                 return AuthenticateResult.Success(authenticationTicket);
             }
