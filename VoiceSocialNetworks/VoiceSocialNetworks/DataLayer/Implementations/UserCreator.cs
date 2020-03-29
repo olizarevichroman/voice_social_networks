@@ -17,10 +17,9 @@ namespace VoiceSocialNetworks.DataLayer.Implementations
         {
             _unitOfWork = unitOfWork;
         }
-        public async Task SyncYandexUser(OAuthCreatingTicketContext ticketContext)
+        public async Task SyncYandexUser(ClaimsIdentity identity)
         {
             var userRepository = _unitOfWork.UserRepository;
-            var identity = ticketContext.Identity;
             var claimsKeyToValue = identity.Claims.Select(c => new KeyValuePair<string, string>(c.Type, c.Value));
             var claimsDictionary = new Dictionary<string, string>(claimsKeyToValue);
             

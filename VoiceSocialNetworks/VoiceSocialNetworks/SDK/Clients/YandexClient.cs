@@ -60,8 +60,9 @@ namespace VoiceSocialNetworks.SDK.Clients
         public async Task<IEnumerable<Claim>> GetUserClaims(string oauthToken)
         {
             var jsonUser = await GetUser(oauthToken);
+            var yandexUser = JsonConvert.DeserializeObject<User>(jsonUser);
             var jsonRoot = JsonDocument.Parse(jsonUser).RootElement;
-            var claims = jsonRoot.EnumerateObject().Select(prop => new Claim(prop.Name, prop.Value.GetRawText()));
+            var claims = jsonRoot.EnumerateObject().Select(prop => new Claim(prop.Name, prop.Value.GetString()));
 
             return claims;
         }

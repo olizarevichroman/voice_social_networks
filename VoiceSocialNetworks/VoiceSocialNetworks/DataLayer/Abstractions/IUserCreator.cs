@@ -6,7 +6,7 @@ namespace VoiceSocialNetworks.DataLayer.Abstractions
 {
     public interface IUserCreator
     {
-        Task SyncYandexUser(OAuthCreatingTicketContext ticketContext);
+        Task SyncYandexUser(ClaimsIdentity ticketContext);
 
         Task SyncVkUser(ClaimsPrincipal principal, OAuthTokenResponse tokenResponse);
     }

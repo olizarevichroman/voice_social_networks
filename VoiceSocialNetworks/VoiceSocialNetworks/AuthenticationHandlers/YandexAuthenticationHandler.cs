@@ -31,7 +31,6 @@ namespace VoiceSocialNetworks.AuthenticationHandlers
             AuthenticationProperties properties,
             OAuthTokenResponse tokens)
         {
-            Options.Events.OnCreatingTicket += _userCreator.SyncYandexUser;
             using var request = new HttpRequestMessage(HttpMethod.Get, Options.UserInformationEndpoint);
             request.Headers.Authorization = new AuthenticationHeaderValue("OAuth", tokens.AccessToken);
 
@@ -44,6 +43,7 @@ namespace VoiceSocialNetworks.AuthenticationHandlers
             using var payload = JsonDocument.Parse(await response.Content.ReadAsStringAsync().ConfigureAwait(false));
             var context = new OAuthCreatingTicketContext(new ClaimsPrincipal(identity), properties, Context, Scheme, Options, Backchannel, tokens, payload.RootElement);
             context.RunClaimActions();
+            await _userCreator.SyncYandexUser(identity);
             await Events.CreatingTicket(context).ConfigureAwait(false);
 
             return new AuthenticationTicket(context.Principal, context.Properties, Scheme.Name);
