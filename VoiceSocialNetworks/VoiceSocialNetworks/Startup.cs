@@ -58,7 +58,7 @@ namespace VoiceSocialNetworks
                     options.ForwardDefaultSelector = (context) =>
                     {
                         Console.WriteLine($"PolicyBased scheme challenged with Path = {context.Request.Path}");
-                        var schemeName = context.Request.Path.Value == "/alice"
+                        var schemeName = context.Request.Path.Value == "/alice/"
                                                             ? "YandexToken"
                                                             : CookieAuthenticationDefaults.AuthenticationScheme;
 
@@ -98,14 +98,7 @@ namespace VoiceSocialNetworks
                     options.TokenEndpoint = "https://oauth.yandex.ru/token";
                     options.UserInformationEndpoint = "https://login.yandex.ru/info";
                     options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    options.ClaimActions.MapJsonKey("first_name", "first_name");
-                    options.ClaimActions.MapJsonKey("last_name", "last_name");
-                    options.ClaimActions.MapJsonKey("display_name", "display_name");
-                    options.ClaimActions.MapJsonKey("default_email", "default_email");
-                    options.ClaimActions.MapJsonKey("real_name", "real_name");
-                    options.ClaimActions.MapJsonKey("login", "login");
-                    options.ClaimActions.MapJsonKey("sex", "sex");
-                    options.ClaimActions.MapJsonKey("id", "id");
+                    options.ClaimActions.MapAll();
                 })
                 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, opt =>
                 {
