@@ -8,7 +8,7 @@ using VoiceSocialNetworks.DataLayer.Abstractions;
 
 namespace VoiceSocialNetworks.Controllers
 {
-    [Route("[controller]")]
+    [Route("[controller]/")]
     [ApiController]
     public class AliceController : ControllerBase
     {
