@@ -40,7 +40,7 @@ namespace VoiceSocialNetworks.AuthenticationHandlers
                 }
 
                 var userClaims = await _yandexClient.GetUserClaims(oauthToken);
-                if (userClaims == null)
+                if (userClaims.Count() == 0)
                 {
                     return AuthenticateResult.NoResult();
                 }

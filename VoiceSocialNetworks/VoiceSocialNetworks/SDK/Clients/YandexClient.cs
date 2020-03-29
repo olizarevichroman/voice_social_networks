@@ -51,6 +51,7 @@ namespace VoiceSocialNetworks.SDK.Clients
             if (!response.IsSuccessStatusCode)
             {
                 Console.WriteLine($"Invalid response to {nameof(GetUser)} with status code = {response.StatusCode}");
+
                 return null;
             }
 
@@ -60,6 +61,11 @@ namespace VoiceSocialNetworks.SDK.Clients
         public async Task<IEnumerable<Claim>> GetUserClaims(string oauthToken)
         {
             var jsonUser = await GetUser(oauthToken);
+            if (jsonUser == null)
+            {
+                return Array.Empty<Claim>();
+            }
+
             var yandexUser = JsonConvert.DeserializeObject<User>(jsonUser);
             var jsonRoot = JsonDocument.Parse(jsonUser).RootElement;
             var claims = jsonRoot.EnumerateObject()
