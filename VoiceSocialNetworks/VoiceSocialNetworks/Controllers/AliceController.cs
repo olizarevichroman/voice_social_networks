@@ -29,23 +29,23 @@ namespace VoiceSocialNetworks.Controllers
                 Version = request.Version
             };
 
-            var user = HttpContext.User;
-            if (!user.Identity.IsAuthenticated)
-            {
-                result.StartAccountLinking = new object();
+            //var user = HttpContext.User;
+            //if (!user.Identity.IsAuthenticated)
+            //{
+            //    result.StartAccountLinking = new object();
 
-                return await Task.FromResult(Ok(result));
-            }
-            var userId = user.FindFirst("id").Value;
-            var yandexUser = await _unitOfWork.UserRepository.GetEntity(userId);
-            if (yandexUser == null)
-            {
-                await _userCreator.SyncYandexUser(user.Identity as ClaimsIdentity);
-            }
+            //    return await Task.FromResult(Ok(result));
+            //}
+            //var userId = user.FindFirst("id").Value;
+            //var yandexUser = await _unitOfWork.UserRepository.GetEntity(userId);
+            //if (yandexUser == null)
+            //{
+            //    await _userCreator.SyncYandexUser(user.Identity as ClaimsIdentity);
+            //}
 
             result.Response = new Response
             {
-                Text = $"Ты авторизован, {yandexUser.DisplayName} поздравляю!"
+                Text = $"Ты авторизован, поздравляю!"
             };
 
             return await Task.FromResult(Ok(result));
