@@ -30,7 +30,7 @@ namespace VoiceSocialNetworks.Controllers
                 Version = request.Version
             };
 
-            Console.WriteLine($"{nameof(AliceController)} handle request with command: {request.Request.Command}");
+            Console.WriteLine($"{nameof(AliceController)} handle request with command: {request?.Request?.Command}");
             var publicLayer = new PublicActionsLayer();
             foreach(var action in publicLayer.Actions)
             {
