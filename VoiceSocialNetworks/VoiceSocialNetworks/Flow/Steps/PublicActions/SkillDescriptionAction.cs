@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using VoiceSocialNetworks.ControllerModels;
@@ -23,7 +22,11 @@ namespace VoiceSocialNetworks.Flow.Steps.PublicActions
 
         public Task<Response> Handle(Request request)
         {
-            throw new NotImplementedException();
+            return Task.FromResult(new Response
+            {
+                Text = "С моей помощью можно управлять социальными сетями с помощью голоса, " +
+                "подробности о всех возможных сценариях есть на сайте https://voicesocialnetworks.xyz"
+            });
         }
     }
 }

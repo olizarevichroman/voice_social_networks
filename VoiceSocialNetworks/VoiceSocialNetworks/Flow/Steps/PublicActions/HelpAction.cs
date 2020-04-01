@@ -23,7 +23,7 @@ namespace VoiceSocialNetworks.Flow.Steps.PublicActions
             var response = new Response
             {
                 Text = "Чтобы управлять социальными сетями сначала следует привязать аккаунт на сайте" +
-                "https://voicesocialnetworks.xyz. После этого можно выполнять вход в социальную сеть через меня"
+                " https://voicesocialnetworks.xyz. После этого можно выполнять вход в социальную сеть через меня"
             };
 
             return Task.FromResult(response);
