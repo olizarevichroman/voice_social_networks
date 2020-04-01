@@ -17,15 +17,15 @@ namespace VoiceSocialNetworks.Flow.Actions
         {
             "Зайти в", "Перейди в", "Войди в"
         };
-        public bool CanHandle(RequestWrapper request)
+        public bool CanHandle(Request request)
         {
             return _activationPhrases.Any(phrase =>
             {
-                return request.Request.Command.StartsWith(phrase, StringComparison.OrdinalIgnoreCase);
+                return request.Command.StartsWith(phrase, StringComparison.OrdinalIgnoreCase);
             });
         }
 
-        public Task<ResponseWrapper> Handle(RequestWrapper request)
+        public Task<Response> Handle(Request request)
         {
             throw new NotImplementedException();
         }

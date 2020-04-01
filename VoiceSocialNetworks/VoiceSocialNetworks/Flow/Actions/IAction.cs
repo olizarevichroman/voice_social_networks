@@ -5,8 +5,8 @@ namespace VoiceSocialNetworks.Flow.Actions
 {
     public interface IAction
     {
-        bool CanHandle(RequestWrapper request);
+        bool CanHandle(Request request);
 
-        Task<ResponseWrapper> Handle(RequestWrapper request);
+        Task<Response> Handle(Request request);
     }
 }

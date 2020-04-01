@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using VoiceSocialNetworks.ControllerModels;
 using VoiceSocialNetworks.DataLayer.Abstractions;
+using VoiceSocialNetworks.Flow.Layers;
 
 namespace VoiceSocialNetworks.Controllers
 {
@@ -29,19 +30,30 @@ namespace VoiceSocialNetworks.Controllers
                 Version = request.Version
             };
 
-            //var user = HttpContext.User;
-            //if (!user.Identity.IsAuthenticated)
-            //{
-            //    result.StartAccountLinking = new object();
+            Console.WriteLine($"{nameof(AliceController)} handle request with command: {request.Request.Command}");
+            var publicLayer = new PublicActionsLayer();
+            foreach(var action in publicLayer.Actions)
+            {
+                if (action.CanHandle(request.Request))
+                {
+                    result.Response = await action.Handle(request.Request);
 
-            //    return await Task.FromResult(Ok(result));
-            //}
-            //var userId = user.FindFirst("id").Value;
-            //var yandexUser = await _unitOfWork.UserRepository.GetEntity(userId);
-            //if (yandexUser == null)
-            //{
-            //    await _userCreator.SyncYandexUser(user.Identity as ClaimsIdentity);
-            //}
+                    return Ok(result);
+                }
+            }
+            var user = HttpContext.User;
+            if (!user.Identity.IsAuthenticated)
+            {
+                result.StartAccountLinking = new object();
+
+                return await Task.FromResult(Ok(result));
+            }
+            var userId = user.FindFirst("id").Value;
+            var yandexUser = await _unitOfWork.UserRepository.GetEntity(userId);
+            if (yandexUser == null)
+            {
+                await _userCreator.SyncYandexUser(user.Identity as ClaimsIdentity);
+            }
 
             result.Response = new Response
             {
