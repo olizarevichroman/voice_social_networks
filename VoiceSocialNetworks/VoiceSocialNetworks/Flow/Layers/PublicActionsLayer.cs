@@ -11,12 +11,11 @@ namespace VoiceSocialNetworks.Flow.Layers
             var actions = new List<IAction>
             {
                 new HelpAction(),
-                new SkillDescriptionAction()
+                new SkillDescriptionAction(),
+                new StupidQuestionsAction()
             };
             Actions = actions;
         }
         public IReadOnlyList<IAction> Actions { get; set; }
-
-
     }
 }
