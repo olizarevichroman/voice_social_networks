@@ -30,7 +30,6 @@ namespace VoiceSocialNetworks.DataLayer.Implementations
             if (user == null)
             {
                 userRepository.Add(yandexUser);
-                //here we need to create new user with associated claims
             }
             else
             {
@@ -44,17 +43,33 @@ namespace VoiceSocialNetworks.DataLayer.Implementations
         {
             var userRepository = _unitOfWork.UserRepository;
             var vkUserRepository = _unitOfWork.VkUserRepository;
-            var yandexUserId = principal.Claims.First(c => c.Type == "Id").Value;
+            var yandexUserId = principal.Claims.First(c => c.Type == "id").Value;
             var payload = tokenResponse.Response.RootElement;
             var vkId = payload.GetProperty("user_id").ToString();
-            var vkUser = new VkUser
-            {
-                YandexUserId = yandexUserId,
-                Id = vkId,
-                AccessToken = tokenResponse.AccessToken
-            };
+            var existingUser = await vkUserRepository.GetEntity(vkId);
 
-            vkUserRepository.Add(vkUser);
+            if (existingUser != null)
+            {
+                if (existingUser.AccessToken != tokenResponse.AccessToken)
+                {
+                    existingUser.AccessToken = tokenResponse.AccessToken;
+                }
+                if (existingUser.YandexUserId != yandexUserId)
+                {
+                    existingUser.YandexUserId = yandexUserId;
+                }
+            }
+            else
+            {
+                var vkUser = new VkUser
+                {
+                    YandexUserId = yandexUserId,
+                    Id = vkId,
+                    AccessToken = tokenResponse.AccessToken
+                };
+
+                vkUserRepository.Add(vkUser);
+            }
 
             await _unitOfWork.CommitChanges().ConfigureAwait(false);
         }

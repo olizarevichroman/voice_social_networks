@@ -30,6 +30,7 @@ namespace VoiceSocialNetworks
         // This method gets called by the runtime. Use this method to add services to the container.
         public static void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<IVkClient, VkClient>();
             services.AddScoped<IYandexClient, YandexClient>();
             services.AddDbContext<ApplicationContext>();
             services.AddScoped<IUserCreator, UserCreator>();
@@ -50,8 +51,16 @@ namespace VoiceSocialNetworks
                 //options.DefaultSignOutScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultAuthenticateScheme = "PolicyBased";
                 options.DefaultSignInScheme = "PolicyBased";
+                options.DefaultChallengeScheme = "PolicyBased";
                 options.DefaultSignOutScheme = "PolicyBased";
             })
+                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, opt =>
+                {
+                    opt.LoginPath = "/";
+                    opt.AccessDeniedPath = "/Error/AccessDenied";
+                    opt.SlidingExpiration = true;
+                    opt.ExpireTimeSpan = TimeSpan.FromDays(7);
+                })
                 .AddPolicyScheme("PolicyBased", "PolyciBased", options =>
                 {
                     options.ForwardDefaultSelector = (context) =>
@@ -71,26 +80,39 @@ namespace VoiceSocialNetworks
                 {
 
                 })
-                .AddOAuth<OAuthOptions, OAuthAuthenticationHandler>("Slack", options =>
+                .AddOAuth<OAuthOptions, OAuthAuthenticationHandler>("vkontakte", options =>
                 {
                     options.SaveTokens = true;
-                    options.ForwardSignIn = "MyScheme";
-                    options.CallbackPath = "/signin-slack";
-                    options.ClientId = "898943090578.913936806982";
-                    options.Scope.Add("channels:read");
-                    options.Scope.Add("chat:write:user");
-                    options.Scope.Add("im:read");
-                    options.Scope.Add("im:write");
-                    options.ClientSecret = "9ca7d53f4943c4224c1d26fc7009140d";
-                    options.AuthorizationEndpoint = "https://slack.com/oauth/authorize";
-                    options.TokenEndpoint = "https://slack.com/api/oauth.access";
+                    options.ForwardSignIn = CookieAuthenticationDefaults.AuthenticationScheme;
+                    options.CallbackPath = "/signin-vk";
+                    options.ClientId = "7301839";
+                    options.ClientSecret = "WlXWXkieypiWMwgHRHcK";
+                    options.AuthorizationEndpoint = "https://oauth.vk.com/authorize";
+                    options.TokenEndpoint = "https://oauth.vk.com/access_token";
                     options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                     options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "user_id");
+                    options.Scope.Add("status");
                 })
+                //.AddOAuth<OAuthOptions, OAuthAuthenticationHandler>("Slack", options =>
+                //{
+                //    options.SaveTokens = true;
+                //    options.ForwardSignIn = "MyScheme";
+                //    options.CallbackPath = "/signin-slack";
+                //    options.ClientId = "898943090578.913936806982";
+                //    options.Scope.Add("channels:read");
+                //    options.Scope.Add("chat:write:user");
+                //    options.Scope.Add("im:read");
+                //    options.Scope.Add("im:write");
+                //    options.ClientSecret = "9ca7d53f4943c4224c1d26fc7009140d";
+                //    options.AuthorizationEndpoint = "https://slack.com/oauth/authorize";
+                //    options.TokenEndpoint = "https://slack.com/api/oauth.access";
+                //    options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                //    options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "user_id");
+                //})
                 .AddOAuth<OAuthOptions, YandexAuthenticationHandler>("Yandex", options =>
                 {
                     options.SaveTokens = true;
-                    options.ForwardSignIn = "MyScheme";
+                    options.ForwardSignIn = CookieAuthenticationDefaults.AuthenticationScheme;
                     options.CallbackPath = "/signin-yandex";
                     options.ClientId = "79a2aa9a61394c5595073a33b8c34a8d";
                     options.ClientSecret = "a258e53ae8a848b88c057c2f6231baad";
@@ -99,13 +121,6 @@ namespace VoiceSocialNetworks
                     options.UserInformationEndpoint = "https://login.yandex.ru/info";
                     options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                     options.ClaimActions.MapAll();
-                })
-                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, opt =>
-                {
-                    opt.LoginPath = "/";
-                    opt.AccessDeniedPath = "/Error/AccessDenied";
-                    opt.SlidingExpiration = true;
-                    opt.ExpireTimeSpan = TimeSpan.FromDays(7);
                 });
         }
 
@@ -132,11 +147,6 @@ namespace VoiceSocialNetworks
                     "ClientApp/content"))
             });
             app.UseAuthentication();
-            app.Use(async (context, next) =>
-            {
-                await next();
-                Console.WriteLine($"Status code: {context.Response.StatusCode}");
-            });
             app.UseRouting();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>

@@ -17,6 +17,17 @@ namespace VoiceSocialNetworks.Controllers
             return Challenge(authProperties, "Slack");
         }
 
+        [Authorize]
+        public IActionResult Vk()
+        {
+            var authProperties = new AuthenticationProperties
+            {
+                RedirectUri = "/"
+            };
+
+            return Challenge(authProperties, "vkontakte");
+        }
+
         public IActionResult Yandex()
         {
             var authProperties = new AuthenticationProperties

@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using VoiceSocialNetworks.ControllerModels;
 using VoiceSocialNetworks.DataLayer.Abstractions;
+using VoiceSocialNetworks.Flow.Actions;
 using VoiceSocialNetworks.Flow.Layers;
+using VoiceSocialNetworks.SDK.Clients;
 
 namespace VoiceSocialNetworks.Controllers
 {
@@ -55,12 +58,22 @@ namespace VoiceSocialNetworks.Controllers
                 await _userCreator.SyncYandexUser(user.Identity as ClaimsIdentity);
             }
 
+            var vkUser = _unitOfWork.VkUserRepository.Find(user => user.YandexUserId == yandexUser.Id).FirstOrDefault();
+            var vkClient = new VkClient();
+            var getStatusAction = new GetVkStatusAction(vkClient, vkUser);
+            if (getStatusAction.CanHandle(request.Request))
+            {
+                result.Response = await getStatusAction.Handle(request.Request);
+
+                return Ok(result);
+            }
+
             result.Response = new Response
             {
                 Text = $"Ты авторизован, поздравляю!"
             };
 
-            return await Task.FromResult(Ok(result));
+            return Ok(result);
         }
     }
 }

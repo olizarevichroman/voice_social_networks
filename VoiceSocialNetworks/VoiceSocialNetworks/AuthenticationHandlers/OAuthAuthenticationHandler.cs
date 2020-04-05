@@ -32,7 +32,7 @@ namespace VoiceSocialNetworks.AuthenticationHandlers
         {
             var authenticationResult = await Context.AuthenticateAsync();
             var user = authenticationResult.Principal;
-            //await _userCreator.SyncVkUser(user, tokens);
+            await _userCreator.SyncVkUser(user, tokens);
 
             //no need to create ticket and do this stuff (, dust need to add/update info with tokens to DB
             var context = new OAuthCreatingTicketContext(new ClaimsPrincipal(identity), properties, Context, Scheme, Options, Backchannel, tokens, tokens.Response.RootElement);

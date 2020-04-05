@@ -37,7 +37,7 @@ class App extends Component {
         </header>
         <div className="content">
           {isUserAuthenticated
-                  ? <a className="connect-link" href="/authenticate/slack">Привязать Slack</a>
+                  ? <a className="connect-link" href="/authenticate/vk">Привязать Vk</a>
                   : <a href="/authenticate/yandex">
                       <p id="pointer">
                         <span className="capitalized-letter">Я</span>
