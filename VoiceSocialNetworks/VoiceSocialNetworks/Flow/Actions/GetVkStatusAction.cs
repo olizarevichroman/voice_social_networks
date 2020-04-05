@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Threading.Tasks;
 using VoiceSocialNetworks.ControllerModels;
 using VoiceSocialNetworks.DataLayer.Models;
@@ -22,6 +23,7 @@ namespace VoiceSocialNetworks.Flow.Actions
 
         public async Task<Response> Handle(Request request)
         {
+            Console.WriteLine($"In {nameof(GetVkStatusAction)} execution of {nameof(Handle)} method with vkUser {JsonConvert.SerializeObject(_user)}");
             var status = await _vkClient.GetStatus(_user.AccessToken);
 
             return new Response
