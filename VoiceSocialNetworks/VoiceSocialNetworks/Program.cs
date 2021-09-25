@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -20,17 +21,7 @@ namespace VoiceSocialNetworks
                         loggingBuilder.AddConsole();
                     });
                     webBuilder.UseStartup<Startup>();
-                    webBuilder.UseKestrel(opt =>
-                    {
-#if DEBUG
-                        opt.ListenLocalhost(64039);
-#else
-                        opt.ListenAnyIP(443, listenOptions =>
-                        {
-                            listenOptions.UseHttps("certificate.pfx", "9786961roma");
-                        });
-#endif
-                    });
+                    webBuilder.ConfigureAppConfiguration(configurationBuilder => configurationBuilder.AddEnvironmentVariables());
                 });
     }
 }

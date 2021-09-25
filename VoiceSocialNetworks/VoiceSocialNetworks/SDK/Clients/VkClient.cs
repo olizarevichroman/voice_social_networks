@@ -46,25 +46,26 @@ namespace VoiceSocialNetworks.SDK.Clients
             return statusText;
         }
 
-        public async Task<string> SetStatus(string accessToken)
+        public async Task<string> SetStatus(string accessToken, string status)
         {
             using var httpClient = new HttpClient();
             var parameters = new Dictionary<string, string>
             {
                 { "v", API_VERSION },
-                { "access_token", accessToken }
+                { "access_token", accessToken },
+                { "text", status }
             };
             var queryBuilder = new QueryBuilder(parameters);
             var uriBuilder = new UriBuilder(BASE_URL)
             {
                 Query = queryBuilder.ToQueryString().Value,
-                Path = "method/status.get"
+                Path = "method/status.set"
             };
             using var httpRequest = new HttpRequestMessage(HttpMethod.Get, uriBuilder.Uri);
             var response = await httpClient.SendAsync(httpRequest);
             if (!response.IsSuccessStatusCode)
             {
-                Console.WriteLine($"Vkontakte status.get return an error with code {response.StatusCode}");
+                Console.WriteLine($"Vkontakte status.set return an error with code {response.StatusCode}");
             }
 
             var jsonResponse = await response.Content.ReadAsStringAsync();

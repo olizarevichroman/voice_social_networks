@@ -21,7 +21,7 @@ namespace VoiceSocialNetworks.DataLayer.Implementations
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var connectionString = _configuration.GetConnectionString("DefaultConnection");
+            var connectionString = _configuration["DefaultConnection"];
             optionsBuilder.UseSqlServer(connectionString);
         }
     }

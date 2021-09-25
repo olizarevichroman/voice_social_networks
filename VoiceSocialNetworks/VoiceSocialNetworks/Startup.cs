@@ -61,7 +61,7 @@ namespace VoiceSocialNetworks
                     opt.SlidingExpiration = true;
                     opt.ExpireTimeSpan = TimeSpan.FromDays(7);
                 })
-                .AddPolicyScheme("PolicyBased", "PolyciBased", options =>
+                .AddPolicyScheme("PolicyBased", "PolicyBased", options =>
                 {
                     options.ForwardDefaultSelector = (context) =>
                     {
@@ -93,22 +93,6 @@ namespace VoiceSocialNetworks
                     options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "user_id");
                     options.Scope.Add("status");
                 })
-                //.AddOAuth<OAuthOptions, OAuthAuthenticationHandler>("Slack", options =>
-                //{
-                //    options.SaveTokens = true;
-                //    options.ForwardSignIn = "MyScheme";
-                //    options.CallbackPath = "/signin-slack";
-                //    options.ClientId = "898943090578.913936806982";
-                //    options.Scope.Add("channels:read");
-                //    options.Scope.Add("chat:write:user");
-                //    options.Scope.Add("im:read");
-                //    options.Scope.Add("im:write");
-                //    options.ClientSecret = "9ca7d53f4943c4224c1d26fc7009140d";
-                //    options.AuthorizationEndpoint = "https://slack.com/oauth/authorize";
-                //    options.TokenEndpoint = "https://slack.com/api/oauth.access";
-                //    options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                //    options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "user_id");
-                //})
                 .AddOAuth<OAuthOptions, YandexAuthenticationHandler>("Yandex", options =>
                 {
                     options.SaveTokens = true;
@@ -124,9 +108,6 @@ namespace VoiceSocialNetworks
                 });
         }
 
-
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment()) 

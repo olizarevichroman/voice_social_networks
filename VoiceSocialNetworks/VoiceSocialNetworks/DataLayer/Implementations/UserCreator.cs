@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.OAuth;
+﻿using System;
+using Microsoft.AspNetCore.Authentication.OAuth;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,10 +43,14 @@ namespace VoiceSocialNetworks.DataLayer.Implementations
         public async Task SyncVkUser(ClaimsPrincipal principal, OAuthTokenResponse tokenResponse)
         {
             var userRepository = _unitOfWork.UserRepository;
-            var vkUserRepository = _unitOfWork.VkUserRepository;
+            foreach (var claim in principal.Claims)
+            {
+                Console.WriteLine($"Claim: {claim.Type}: {claim.Value}");
+            }
             var yandexUserId = principal.Claims.First(c => c.Type == "id").Value;
             var payload = tokenResponse.Response.RootElement;
             var vkId = payload.GetProperty("user_id").ToString();
+            var vkUserRepository = _unitOfWork.VkUserRepository;
             var existingUser = await vkUserRepository.GetEntity(vkId);
 
             if (existingUser != null)

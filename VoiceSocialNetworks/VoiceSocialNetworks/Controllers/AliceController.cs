@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -60,10 +61,13 @@ namespace VoiceSocialNetworks.Controllers
 
             var vkUser = _unitOfWork.VkUserRepository.Find(user => user.YandexUserId == yandexUser.Id).FirstOrDefault();
             var vkClient = new VkClient();
-            var getStatusAction = new GetVkStatusAction(vkClient, vkUser);
-            if (getStatusAction.CanHandle(request.Request))
+            var actions = new List<IAction>
+                { new SetVkStatusAction(vkClient, vkUser), new GetVkStatusAction(vkClient, vkUser) };
+            var vkAction = actions.FirstOrDefault(x => x.CanHandle(request.Request));
+            
+            if (vkAction != null)
             {
-                result.Response = await getStatusAction.Handle(request.Request);
+                result.Response = await vkAction.Handle(request.Request);
 
                 return Ok(result);
             }

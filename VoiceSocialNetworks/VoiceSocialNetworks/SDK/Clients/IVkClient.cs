@@ -6,6 +6,6 @@ namespace VoiceSocialNetworks.SDK.Clients
     {
         public Task<string> GetStatus(string accessToken);
 
-        public Task<string> SetStatus(string accessToken);
+        public Task<string> SetStatus(string accessToken, string status);
     }
 }

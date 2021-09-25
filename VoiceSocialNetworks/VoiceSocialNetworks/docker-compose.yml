@@ -1,0 +1,21 @@
+﻿version: "3.9"  # optional since v1.27.0
+services:
+  web:
+    build: .
+    ports:
+      - "80:80"
+    depends_on: [ms-sql-server]
+    domainname: voicesocialnetworks
+    image: voicesocialnetworks.azurecr.io/web
+    container_name: web
+    environment:
+      DefaultConnection: "Server=ms-sql-server, 1433; Initial Catalog = VoiceSocialNetworks; User ID = SA; Password = 9786961romaN"
+  ms-sql-server:
+    image: mcr.microsoft.com/mssql/server:2017-latest
+    domainname: voicesocialnetworks
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "9786961romaN"
+      MSSQL_PID: "Express"
+    ports:
+      - "1433:1433"
